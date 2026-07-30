@@ -20,11 +20,34 @@ permissions:
 
 jobs:
   ipa:
-    runs-on: macos-15
+    # macos-15 defaults to Swift 6.1. Expo SDK 57's 'apple' package declares
+    # swift-tools-version 6.2, so package resolution fails there with:
+    #   "package 'apple' is using Swift tools version 6.2.0 but the installed
+    #    version is 6.1.0"
+    # macos-26 defaults to Xcode 26.6 (since 2026-07-21), which ships Swift 6.2.
+    runs-on: macos-26
     timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Select newest Xcode and verify Swift >= 6.2
+        run: |
+          set -euo pipefail
+          echo "--- installed Xcodes ---"
+          ls -d /Applications/Xcode*.app
+          NEWEST=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          sudo xcode-select -s "$NEWEST"
+          echo "selected: $NEWEST"
+          xcodebuild -version
+          swift --version
+          SWIFT_MAJOR_MINOR=$(swift --version 2>&1 | grep -oE 'Swift version [0-9]+\.[0-9]+' | grep -oE '[0-9]+\.[0-9]+' | head -1)
+          echo "swift tools: $SWIFT_MAJOR_MINOR"
+          # Fail early and loudly rather than 12 minutes later in package resolution.
+          if [ "$(printf '%s\n6.2\n' "$SWIFT_MAJOR_MINOR" | sort -V | head -1)" != "6.2" ]; then
+            echo "::error::Swift $SWIFT_MAJOR_MINOR is below the 6.2 required by Expo SDK 57"
+            exit 1
+          fi
 
       - uses: actions/setup-node@v4
         with:
