@@ -3,6 +3,7 @@ import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { addHabit, listHabits, markHabit, type Habit } from '../src/db/systems';
+import { ui } from '../src/ui/copy.catalogue';
 import { ContentColumn, Rule } from '../src/ui/primitives';
 import { usePalette, useSizeClass } from '../src/ui/theme';
 import { radius, space } from '../src/ui/tokens';
@@ -91,7 +92,7 @@ export default function Rhythms() {
           })}
 
           <View style={{ marginTop: space[6] }}>
-            <Text style={[meta, { color: p.inkMuted, marginBottom: space[3] }]}>Add a rhythm</Text>
+            <Text style={[meta, { color: p.inkMuted, marginBottom: space[3] }]}>{ui.addRhythm}</Text>
             <View style={{ flexDirection: 'row', gap: space[4], alignItems: 'flex-end' }}>
               <TextInput
                 value={draft}

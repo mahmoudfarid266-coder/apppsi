@@ -38,7 +38,17 @@ export const ui = {
   unreadSuffix: 'unread',
   openInbox: 'Inbox',
   openMap: 'Places',
+  openNow: 'Now',
   back: 'Back',
+  useLocation: 'Use my location',
+  rememberPlace: 'Remember this place',
+  somethingElse: 'Something else',
+  notNow: 'Not now',
+  doIt: 'Do it',
+  addToMenu: 'Add to the menu',
+  addRhythm: 'Add a rhythm',
+  addSomeone: 'Add someone',
+  keepIt: 'Keep it',
   storageFull:
     "This device is out of space, so that couldn't be saved. Free some space and try again.",
 } as const;

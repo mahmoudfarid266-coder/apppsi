@@ -16,6 +16,7 @@ import {
   totalXp,
 } from '../src/db/systems';
 import { computeLoad, nextAction, type Candidate, type Context } from '../src/domain/scorer';
+import { ui } from '../src/ui/copy.catalogue';
 import { ContentColumn, Pill, TextAction } from '../src/ui/primitives';
 import { usePalette, useSizeClass } from '../src/ui/theme';
 import { space } from '../src/ui/tokens';
@@ -166,7 +167,7 @@ export default function Now() {
 
         {pick && (
           <>
-            <Pill label="Do it" onPress={doIt} />
+            <Pill label={ui.doIt} onPress={doIt} />
             <View
               style={{
                 flexDirection: 'row',
@@ -175,8 +176,8 @@ export default function Now() {
                 marginBottom: space[4],
               }}
             >
-              <TextAction label="Not now" onPress={notNow} />
-              <TextAction label="Something else" onPress={notNow} />
+              <TextAction label={ui.notNow} onPress={notNow} />
+              <TextAction label={ui.somethingElse} onPress={notNow} />
             </View>
           </>
         )}

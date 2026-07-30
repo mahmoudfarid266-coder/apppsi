@@ -9,6 +9,7 @@ import {
   logInteraction,
   type Person,
 } from '../src/db/systems';
+import { ui } from '../src/ui/copy.catalogue';
 import { ContentColumn, Rule } from '../src/ui/primitives';
 import { usePalette, useSizeClass } from '../src/ui/theme';
 import { radius, space } from '../src/ui/tokens';
@@ -144,7 +145,7 @@ export default function People() {
           ))}
 
           <View style={{ marginTop: space[6] }}>
-            <Text style={[meta, { color: p.inkMuted, marginBottom: space[3] }]}>Add someone</Text>
+            <Text style={[meta, { color: p.inkMuted, marginBottom: space[3] }]}>{ui.addSomeone}</Text>
             <TextInput
               value={draft}
               onChangeText={setDraft}

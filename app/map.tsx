@@ -99,7 +99,7 @@ export default function Map() {
           </Text>
           <View style={{ flex: 1 }} />
           <View style={{ marginBottom: space[5] }}>
-            <Pill label="Use my location" onPress={enableLocation} />
+            <Pill label={ui.useLocation} onPress={enableLocation} />
           </View>
           <Text style={[meta, { color: p.inkMuted, marginBottom: space[6] }]}>
             Everything works without it. Quests just wait for you to open them.
@@ -163,7 +163,7 @@ export default function Map() {
         </View>
 
         <View style={{ marginBottom: space[5] }}>
-          <Pill label="Remember this place" onPress={anchorHere} />
+          <Pill label={ui.rememberPlace} onPress={anchorHere} />
         </View>
 
         <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: insets.bottom + space[7] }}>

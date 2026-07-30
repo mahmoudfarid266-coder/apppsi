@@ -11,6 +11,7 @@ import {
   listMenu,
   type MenuItem,
 } from '../src/db/systems';
+import { ui } from '../src/ui/copy.catalogue';
 import { ContentColumn, Pill, Rule } from '../src/ui/primitives';
 import { usePalette, useSizeClass } from '../src/ui/theme';
 import { radius, space } from '../src/ui/tokens';
@@ -138,7 +139,7 @@ export default function Reset() {
           })}
 
           {/* Add to menu */}
-          <Text style={[meta, { color: p.inkMuted, marginBottom: space[3] }]}>Add to the menu</Text>
+          <Text style={[meta, { color: p.inkMuted, marginBottom: space[3] }]}>{ui.addToMenu}</Text>
           <TextInput
             value={draft}
             onChangeText={setDraft}
@@ -197,7 +198,7 @@ export default function Reset() {
           />
           <View style={{ marginTop: space[4] }}>
             <Pill
-              label="Keep it"
+              label={ui.keepIt}
               onPress={async () => {
                 const t = journal.trim();
                 if (!t) return;
