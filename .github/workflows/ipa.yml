@@ -43,13 +43,31 @@ jobs:
 
       - name: Locate workspace and scheme
         id: xc
+        # schemes[0] is WRONG. The workspace lists every CocoaPods scheme too,
+        # and on v0.1.3 that picked `EXConstants` — a Pod — so xcodebuild tried
+        # to build a Pod target standalone and died resolving its packages.
+        # The app scheme is the one named after the workspace.
         run: |
+          set -euo pipefail
           WORKSPACE=$(find ios -maxdepth 1 -name '*.xcworkspace' | head -1)
-          SCHEME=$(xcodebuild -workspace "$WORKSPACE" -list -json \
-                   | python3 -c "import json,sys; print(json.load(sys.stdin)['workspace']['schemes'][0])")
+          BASE=$(basename "$WORKSPACE" .xcworkspace)
+          echo "--- all schemes in workspace ---"
+          xcodebuild -workspace "$WORKSPACE" -list || true
+          xcodebuild -workspace "$WORKSPACE" -list -json > /tmp/schemes.json
+          SCHEME=$(BASE="$BASE" python3 - <<'PY'
+import json, os
+s = json.load(open('/tmp/schemes.json'))['workspace']['schemes']
+base = os.environ['BASE']
+if base in s:
+    print(base)
+else:
+    ci = [x for x in s if x.lower() == base.lower()]
+    print(ci[0] if ci else s[0])
+PY
+)
           echo "workspace=$WORKSPACE" >> "$GITHUB_OUTPUT"
-          echo "scheme=$SCHEME"       >> "$GITHUB_OUTPUT"
-          echo "workspace=$WORKSPACE scheme=$SCHEME"
+          echo "scheme=$SCHEME" >> "$GITHUB_OUTPUT"
+          echo "SELECTED workspace=$WORKSPACE scheme=$SCHEME"
 
       - name: Build unsigned Release
         id: build
