@@ -121,7 +121,11 @@ jobs:
           grep -nE "error:|fatal error|\*\* BUILD FAILED|requires a development team|No such module" build.log \
             > /tmp/lg/errors.log 2>/dev/null || echo "(no error: lines matched)" > /tmp/lg/errors.log
           find build -type d -name '*.app' > /tmp/lg/apps.log 2>/dev/null || true
-          echo "run ${{ github.run_id }} / build outcome: ${{ steps.build.outcome }}" > /tmp/lg/status.log
+          {
+            echo "run ${{ github.run_id }} / build outcome: ${{ steps.build.outcome }}"
+            APP=$(find build -type d -name '*.app' | head -1)
+            [ -n "$APP" ] && echo "app size: $(du -sk "$APP" | cut -f1) KB"
+          } > /tmp/lg/status.log
           cd /tmp/lg
           git init -q
           git config user.email ci@example.com
@@ -159,10 +163,37 @@ jobs:
           [ "$SIZE" -ge 1000000 ] || { echo "::error::ipa only $SIZE bytes"; exit 1; }
           ls -lh rudder-unsigned.ipa
 
-      - name: Publish the ipa to the release branch
-        # Artifact downloads need auth; a branch does not. This makes the .ipa
-        # fetchable with plain git.
+      # PRIMARY delivery: a GitHub Release asset.
+      #
+      # Branch pushes reject any file over 100 MB, which is what killed v0.2.0
+      # once react-native-maps landed. Release assets allow up to 2 GB AND are
+      # downloadable with no authentication on a public repo — better than both
+      # the branch hack and artifacts (which are 401 even when public).
+      - name: Publish the ipa as a release asset
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          [ "${GITHUB_REF_TYPE}" = "tag" ] || TAG="build-${GITHUB_RUN_ID}"
+          SIZE=$(stat -f%z rudder-unsigned.ipa)
+          echo "publishing $SIZE bytes as release $TAG"
+          gh release create "$TAG" rudder-unsigned.ipa \
+            --title "Rudder $TAG (unsigned)" \
+            --notes "Unsigned ipa for SideStore. $SIZE bytes. Run ${GITHUB_RUN_ID}." \
+            || gh release upload "$TAG" rudder-unsigned.ipa --clobber
+          echo "download: https://github.com/${GITHUB_REPOSITORY}/releases/download/$TAG/rudder-unsigned.ipa"
+
+      # SECONDARY: keep the branch copy when it fits. Non-fatal by design —
+      # a size rejection here must not discard a good build.
+      - name: Also push to the ipa branch (best effort)
+        continue-on-error: true
+        run: |
+          SIZE=$(stat -f%z rudder-unsigned.ipa)
+          if [ "$SIZE" -gt 94000000 ]; then
+            echo "::warning::$SIZE bytes exceeds the practical branch limit; release asset only"
+            exit 0
+          fi
           mkdir -p /tmp/rel && cp rudder-unsigned.ipa /tmp/rel/
           cd /tmp/rel
           git init -q
@@ -173,7 +204,6 @@ jobs:
           git push -q --force \
             "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" \
             HEAD:refs/heads/ipa
-          echo "pushed rudder-unsigned.ipa to the ipa branch"
 
       - uses: actions/upload-artifact@v4
         with:

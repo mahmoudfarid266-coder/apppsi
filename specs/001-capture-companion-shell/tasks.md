@@ -304,3 +304,34 @@ durability path held in reserve in plan.md rather than weakening the assertion.
 **The real gate is SC-007, not this list.** All 83 tasks can be complete while the feature still
 fails, because the criterion that matters is whether you reach for this app instead of Notes for
 seven consecutive days. Phase 2 of the roadmap does not begin until that is true.
+
+---
+
+## Phase 8: Convergence
+
+*Appended by `/speckit-converge` on 2026-07-30 after the first implementation pass. Ordered
+CRITICAL first. Existing tasks above are untouched.*
+
+**The four CRITICAL items are constitution MUSTs that are currently unenforced in code.** Until
+T101 and T102 exist, nothing prevents a future edit from introducing red, shame copy, or a
+neglected companion — the rules live only in documents.
+
+- [ ] T099 **CRITICAL** Create `src/domain/` and move all pure logic into it test-first: `growthStage` (currently in `src/companion/states.manifest.ts`) and `selectRegions` (currently in `src/location/geofence.ts`), plus capture ordering per Constitution IX (contradicts)
+- [ ] T100 **CRITICAL** Add the process-kill durability test at `tests/e2e/kill-mid-buffer.yaml` — force-kill during the pending-buffer window per Principle I and plan.md Complexity Tracking #1 (missing)
+- [ ] T101 **CRITICAL** Build the copy lint at `scripts/lint-copy.ts` — banned-pattern check over `src/ui/copy.catalogue.ts` plus a check that no user-facing literal exists outside it, per Principle IV/XI and T019–T020 (missing)
+- [ ] T102 **CRITICAL** Build the companion state assertion at `tests/components/companion-states.test.ts` — the manifest union must be exactly `idle | attentive | acknowledging`, failing even on an unreferenced asset, per Principle IV and T021 (missing)
+- [ ] T103 Run `/speckit-specify` for feature 002 covering places, place-bound quests, and geofencing — `app/map.tsx`, `src/db/places.ts`, `src/location/geofence.ts` and `src/location/task.ts` were built with no spec, and spec.md Assumptions plus plan.md Gate 12 explicitly excluded location from this feature (unrequested)
+- [ ] T104 Implement `src/sync/` — outbox, drain worker, puller, cursor per contracts/sync-protocol.md and FR-010/FR-011 (missing)
+- [ ] T105 Implement anonymous auth and both sign-in paths in `src/lib/auth.ts` — upgrade is a no-op, adopt is a transactional re-attribution per FR-014/FR-015 and research R3 (missing)
+- [ ] T106 Implement onboarding at `app/onboarding/` including naming the companion — the crow is currently anonymous per FR-018/FR-032 and US3/AC1 (missing)
+- [ ] T107 Implement capture edit and discard in `src/systems/quests/` — `original_text` stays recoverable, discard is reversible for 30 days per FR-012/FR-013 and US4/AC4–5 (missing)
+- [ ] T108 Implement voice capture in `src/systems/quests/voice.ts` — on-device transcription, audio retained, degrades to text when the mic is denied per FR-005 and US1/AC5 (missing)
+- [ ] T109 Implement the home-screen widget in `plugins/` as a static render plus a `rudder://capture` deep link per FR-008 and contracts/app-entry-points.md (missing)
+- [ ] T110 Create `supabase/migrations/` with the four tables, default-deny RLS, and the enumerated cross-user isolation test per Gate 14 and NFR-19 (missing)
+- [ ] T111 Implement draft persistence in `src/systems/quests/draft.ts` — survives interruption, backgrounding, termination, and iPad split-width resize per FR-006 (missing)
+- [ ] T112 Implement offline export in `src/systems/quests/export.ts` — JSON, CSV, and an audio manifest with no network per FR-017 (missing)
+- [ ] T113 Wire personality-off through the UI — `plain` strings exist in `src/ui/copy.catalogue.ts` but nothing consumes them, and the component suite must run in both modes per FR-025 (partial)
+- [ ] T114 Detect and surface storage exhaustion in `src/db/index.ts` — `ui.storageFull` is defined but never shown, and this is the one place a loud failure is correct per FR-016 (partial)
+- [ ] T115 Bundle Space Grotesk into `assets/fonts/` and register it, or remove the reference — `DISPLAY_FAMILY` in `src/ui/type.ts` names `SpaceGrotesk-Bold` which does not exist, so display type silently falls back per design-system/MASTER.md §2 (partial)
+- [ ] T116 Build the a11y suite at `tests/a11y/` — per-theme contrast, VoiceOver labels, 48pt targets, Dynamic Type to XXL, Reduce Motion at 0ms per FR-035/FR-036 and NFR-6 (missing)
+- [ ] T117 Build the cold-launch harness at `tests/perf/coldstart.ts` — 100 runs on the iPad Air 4, E1 and E2 reported separately per SC-001 and T033 (missing)
