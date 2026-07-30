@@ -56,6 +56,15 @@ export default function Capture() {
           <Crow state={state} size={30} />
           <View style={{ flexDirection: 'row', gap: space[5] }}>
             <Pressable
+              onPress={() => router.push('/now')}
+              accessibilityRole="button"
+              accessibilityLabel="Now"
+              hitSlop={16}
+              style={{ minHeight: 48, justifyContent: 'center' }}
+            >
+              <Text style={[meta, { color: p.ink }]}>Now</Text>
+            </Pressable>
+            <Pressable
               onPress={() => router.push('/map')}
               accessibilityRole="button"
               accessibilityLabel={ui.openMap}

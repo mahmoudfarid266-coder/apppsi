@@ -69,7 +69,10 @@ export function open(): Promise<void> {
     // Places, quests, and visits. All local-only — see src/db/places.ts.
     const { SCHEMA_PLACES } = await import('./places');
     await handle.execAsync(SCHEMA_PLACES);
+    const { SCHEMA_SYSTEMS, seedDefaults } = await import('./systems');
+    await handle.execAsync(SCHEMA_SYSTEMS);
     db = handle;
+    await seedDefaults();
     await drain();
   })();
   return opening;

@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
 import { listPlaces, listQuests, recordVisit, type Place } from '../db/places';
+import { notifyNow } from '../lib/notify';
 
 /**
  * Geofencing — the SENSE stage for place-bound quests.
@@ -123,9 +124,28 @@ export async function syncRegions(): Promise<{ monitored: number; skipped: strin
   return { monitored: chosen.length, skipped: '' };
 }
 
-/** Called by the registered task when a region boundary is crossed. */
+/**
+ * Called by the registered task when a region boundary is crossed.
+ *
+ * THIS IS WHERE A LOCATION REMINDER BECOMES A REMINDER. An earlier version
+ * recorded the visit and said nothing, which made the whole feature inert.
+ */
 export async function onRegionEvent(placeId: string, entered: boolean) {
+  const places = await listPlaces();
+  const place = places.find((p) => p.id === placeId);
+  if (!place) return;
+
   if (entered) await recordVisit(placeId);
-  // Notifications are a later phase (FR-0.6 owns the single scheduler).
-  // The visit record is what feeds place_fit in the scorer.
+
+  const open = (await listQuests(placeId)).filter(
+    (q) => q.triggerKind === (entered ? 'arrive' : 'leave') || q.triggerKind === 'pass_near'
+  );
+  if (open.length === 0) return;
+
+  const first = open[0];
+  const more = open.length - 1;
+  await notifyNow(
+    entered ? `You're at ${place.label}` : `Leaving ${place.label}`,
+    more > 0 ? `${first.title} — and ${more} more here` : first.title
+  );
 }
