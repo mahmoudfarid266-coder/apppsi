@@ -54,17 +54,7 @@ jobs:
           echo "--- all schemes in workspace ---"
           xcodebuild -workspace "$WORKSPACE" -list || true
           xcodebuild -workspace "$WORKSPACE" -list -json > /tmp/schemes.json
-          SCHEME=$(BASE="$BASE" python3 - <<'PY'
-import json, os
-s = json.load(open('/tmp/schemes.json'))['workspace']['schemes']
-base = os.environ['BASE']
-if base in s:
-    print(base)
-else:
-    ci = [x for x in s if x.lower() == base.lower()]
-    print(ci[0] if ci else s[0])
-PY
-)
+          SCHEME=$(jq -r --arg b "$BASE" '.workspace.schemes | if index($b) then $b else .[0] end' /tmp/schemes.json)
           echo "workspace=$WORKSPACE" >> "$GITHUB_OUTPUT"
           echo "scheme=$SCHEME" >> "$GITHUB_OUTPUT"
           echo "SELECTED workspace=$WORKSPACE scheme=$SCHEME"
