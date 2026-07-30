@@ -1,0 +1,37 @@
+{
+  "name": "rudder",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start --dev-client",
+    "prebuild": "expo prebuild --platform ios --clean",
+    "build:dev": "eas build --profile development --platform ios",
+    "build:ipa": "eas build --profile sideload --platform ios",
+    "lint:copy": "tsx scripts/lint-copy.ts",
+    "test:domain": "vitest run --dir tests/domain",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run typecheck && npm run lint:copy && npm run test:domain"
+  },
+  "dependencies": {
+    "expo": "latest",
+    "expo-constants": "~57.0.8",
+    "expo-linking": "~57.0.4",
+    "expo-router": "~57.0.9",
+    "expo-splash-screen": "~57.0.5",
+    "expo-sqlite": "~57.0.1",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.2",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "~4.26.0",
+    "react-native-svg": "15.15.4",
+    "react-native-web": "^0.21.2",
+    "uuidv7": "^1.2.1"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.0",
+    "typescript": "~5.9.0"
+  }
+}
