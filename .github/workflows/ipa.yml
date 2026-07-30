@@ -47,19 +47,34 @@ jobs:
           echo "scheme=$SCHEME"       >> "$GITHUB_OUTPUT"
           echo "Using workspace=$WORKSPACE scheme=$SCHEME"
 
-      - name: Build unsigned Release
+      - name: List available schemes
         run: |
+          xcodebuild -workspace "${{ steps.xc.outputs.workspace }}" -list || true
+
+      - name: Build unsigned Release
+        # No `| xcpretty`. It is not preinstalled on macos-15, and piping into a
+        # missing binary gives xcodebuild a broken pipe — it dies early while
+        # PIPESTATUS[0] can still read as 0, producing a green step with no
+        # product. That is exactly what happened on v0.1.1.
+        run: |
+          set -o pipefail
           xcodebuild \
             -workspace "${{ steps.xc.outputs.workspace }}" \
             -scheme "${{ steps.xc.outputs.scheme }}" \
             -configuration Release \
-            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
             -derivedDataPath build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            ENABLE_BITCODE=NO \
-            | xcpretty || exit ${PIPESTATUS[0]}
+            build
+
+      - name: Show build products
+        run: |
+          echo "--- .app products found ---"
+          find build -type d -name '*.app' | head -20 || true
+          echo "--- Products tree ---"
+          ls -la build/Build/Products/ 2>/dev/null || echo "(no build/Build/Products)"
 
       - name: Package into an .ipa
         run: |
