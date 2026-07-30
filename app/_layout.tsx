@@ -4,6 +4,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import { ThemeProvider, useTheme } from '../src/ui/theme';
 import { open } from '../src/db';
+// Registers the geofence task at module scope. startGeofencingAsync throws
+// "Task not found" without this. Import only — no runtime cost on first paint.
+import '../src/location/task';
 
 /**
  * DELIBERATELY THIN. Nothing here may block the capture route's first paint

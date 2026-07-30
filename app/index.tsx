@@ -54,15 +54,26 @@ export default function Capture() {
           }}
         >
           <Crow state={state} size={30} />
-          <Pressable
-            onPress={() => router.push('/inbox')}
-            accessibilityRole="button"
-            accessibilityLabel={ui.openInbox}
-            hitSlop={16}
-            style={{ minHeight: 48, justifyContent: 'center' }}
-          >
-            <Text style={[meta, { color: p.inkMuted }]}>{ui.openInbox}</Text>
-          </Pressable>
+          <View style={{ flexDirection: 'row', gap: space[5] }}>
+            <Pressable
+              onPress={() => router.push('/map')}
+              accessibilityRole="button"
+              accessibilityLabel={ui.openMap}
+              hitSlop={16}
+              style={{ minHeight: 48, justifyContent: 'center' }}
+            >
+              <Text style={[meta, { color: p.inkMuted }]}>{ui.openMap}</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => router.push('/inbox')}
+              accessibilityRole="button"
+              accessibilityLabel={ui.openInbox}
+              hitSlop={16}
+              style={{ minHeight: 48, justifyContent: 'center' }}
+            >
+              <Text style={[meta, { color: p.inkMuted }]}>{ui.openInbox}</Text>
+            </Pressable>
+          </View>
         </View>
 
         {/* The hero. One thing on screen, unmistakably. */}

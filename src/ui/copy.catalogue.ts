@@ -37,6 +37,7 @@ export const ui = {
   inboxTitle: 'Inbox',
   unreadSuffix: 'unread',
   openInbox: 'Inbox',
+  openMap: 'Places',
   back: 'Back',
   storageFull:
     "This device is out of space, so that couldn't be saved. Free some space and try again.",

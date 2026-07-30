@@ -27,7 +27,11 @@ const config: ExpoConfig = {
         'Used only to record a voice capture on this device. Audio stays on your device.',
       NSSpeechRecognitionUsageDescription:
         'Used only to turn a voice capture into text on this device.',
-      // No location keys in this phase — see plan.md Gate 12.
+      // Location: foreground only, and framed by what it does (FR-033).
+      // Precise coordinates never leave the device (Principle XII), so there is
+      // deliberately NO "Always" permission request and no background mode.
+      NSLocationWhenInUseUsageDescription:
+        'Used to remember what you wanted to do near places you go. Your locations stay on this device and are never shared.',
       UISupportedInterfaceOrientations: [
         'UIInterfaceOrientationPortrait',
         'UIInterfaceOrientationPortraitUpsideDown',

@@ -66,10 +66,20 @@ export function open(): Promise<void> {
   opening = (async () => {
     const handle = await SQLite.openDatabaseAsync('rudder.db');
     await handle.execAsync(SCHEMA);
+    // Places, quests, and visits. All local-only — see src/db/places.ts.
+    const { SCHEMA_PLACES } = await import('./places');
+    await handle.execAsync(SCHEMA_PLACES);
     db = handle;
     await drain();
   })();
   return opening;
+}
+
+/** Await the open database. Used by modules that cannot run before init. */
+export async function getDb(): Promise<SQLite.SQLiteDatabase> {
+  if (!db) await open();
+  if (!db) throw new Error('database unavailable');
+  return db;
 }
 
 /** Move anything buffered into durable storage. Safe to call repeatedly. */
