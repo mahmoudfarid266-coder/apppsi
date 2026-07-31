@@ -195,6 +195,8 @@ export default function Now() {
             <TextAction label={ui.openRhythms} onPress={() => router.push('/rhythms')} />
             <TextAction label={ui.openPeople} onPress={() => router.push('/people')} />
             <TextAction label={ui.openReset} onPress={() => router.push('/reset')} />
+            <TextAction label={ui.openFocus} onPress={() => router.push('/focus')} />
+            <TextAction label={ui.openSolitude} onPress={() => router.push('/solitude')} />
           </View>
         )}
         {overstim && (

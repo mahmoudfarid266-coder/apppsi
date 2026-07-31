@@ -49,6 +49,7 @@ export function fieldInput(size: SizeClass) {
 }
 
 /** System face below 24pt. Scales with Dynamic Type. */
+export const title = { fontFamily: DISPLAY_FAMILY, fontSize: 24, lineHeight: 28, fontWeight: '700' as const, letterSpacing: -0.24 } as const;
 export const body = { fontSize: 17, lineHeight: 26 } as const;
 export const emphasis = { fontSize: 17, lineHeight: 25, fontWeight: '600' as const } as const;
 export const supporting = { fontSize: 15, lineHeight: 23 } as const;

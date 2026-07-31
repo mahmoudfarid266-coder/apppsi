@@ -13,6 +13,10 @@ const config: ExpoConfig = {
   userInterfaceStyle: 'automatic', // follows the system, no theme question at onboarding
   // New Architecture is the default in SDK 57 — no flag needed.
 
+  // Apricot ground, bordeaux mark. Flat: no gradient, shadow, or glow.
+  // Verified legible at 40px, which is the handoff's stated bar.
+  icon: './assets/icon/icon.png',
+
   ios: {
     bundleIdentifier: BUNDLE_ID,
     supportsTablet: true,
@@ -47,11 +51,14 @@ const config: ExpoConfig = {
     [
       'expo-splash-screen',
       {
+        image: './assets/icon/splash.png',
+        imageWidth: 140,
         backgroundColor: '#FDF4EC',
         dark: { backgroundColor: '#24050F' },
         resizeMode: 'contain',
       },
     ],
+    'expo-notifications',
   ],
 
   experiments: { typedRoutes: true },
