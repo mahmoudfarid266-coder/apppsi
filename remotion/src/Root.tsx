@@ -34,7 +34,12 @@ const Stage = ({ pal }: { pal: Palette }) => {
         return (
           <AbsoluteFill
             key={i}
-            style={{ opacity, alignItems: 'center', justifyContent: 'center' }}
+            style={{
+              opacity,
+              alignItems: 'center',
+              justifyContent: 'center',
+              transform: 'scale(1.318)',
+            }}
           >
             <Sequence from={start} durationInFrames={S(dur) + 20} layout="none">
               <Comp pal={pal} />
@@ -54,7 +59,7 @@ export const RemotionRoot = () => (
       durationInFrames={S(18)}
       fps={FPS}
       width={1080}
-      height={1920}
+      height={1556}
       defaultProps={{ pal: light }}
     />
     <Composition

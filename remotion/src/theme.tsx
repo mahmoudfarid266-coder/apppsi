@@ -1,3 +1,9 @@
+import { loadFont } from '@remotion/google-fonts/SpaceGrotesk';
+
+// Without this the hero falls back to a system face and the display type is
+// simply wrong — the first render made that obvious.
+const { fontFamily: SPACE_GROTESK } = loadFont('normal', { weights: ['500', '700'] });
+
 /**
  * Palette A, lifted verbatim from src/ui/tokens.ts in the app.
  *
@@ -33,7 +39,7 @@ export const dark = {
 
 export type Palette = typeof light;
 
-export const DISPLAY = "'Space Grotesk', system-ui, sans-serif";
+export const DISPLAY = `${SPACE_GROTESK}, system-ui, sans-serif`;
 export const SYSTEM =
   "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif";
 
