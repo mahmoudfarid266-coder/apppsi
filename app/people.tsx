@@ -10,6 +10,7 @@ import {
   type Person,
 } from '../src/db/systems';
 import { ui } from '../src/ui/copy.catalogue';
+import { Expand } from '../src/ui/motion';
 import { ContentColumn, Rule } from '../src/ui/primitives';
 import { usePalette, useSizeClass } from '../src/ui/theme';
 import { radius, space } from '../src/ui/tokens';

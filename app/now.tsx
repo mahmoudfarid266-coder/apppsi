@@ -17,6 +17,7 @@ import {
 } from '../src/db/systems';
 import { computeLoad, nextAction, type Candidate, type Context } from '../src/domain/scorer';
 import { ui } from '../src/ui/copy.catalogue';
+import { Enter, Swap } from '../src/ui/motion';
 import { ContentColumn, Pill, TextAction } from '../src/ui/primitives';
 import { usePalette, useSizeClass } from '../src/ui/theme';
 import { space } from '../src/ui/tokens';
@@ -141,14 +142,17 @@ export default function Now() {
         style={{ paddingTop: insets.top + space[4], paddingBottom: insets.bottom + space[4] }}
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Crow state={pick ? 'attentive' : 'idle'} size={30} />
-          <Text style={[meta, tabular, { color: p.inkMuted }]}>{xp} xp</Text>
+          <Crow state={pick ? 'attentive' : 'idle'} size={34} />
+          {/* Overstimulated: XP disappears along with the destinations. */}
+          {!overstim && <Text style={[meta, tabular, { color: p.inkMuted }]}>{xp} xp</Text>}
         </View>
 
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={{ flex: 1, justifyContent: 'center', paddingVertical: space[7] }}>
             {pick ? (
-              <>
+              /* Each offer enters cleanly rather than cross-fading in place:
+                 200ms, opacity + 8pt rise. Keyed on the candidate id. */
+              <Swap swapKey={pick.candidate.id}>
                 <Text style={[supporting, { color: p.inkSecondary, marginBottom: space[3] }]}>
                   {overstim ? 'just this.' : 'one thing.'}
                 </Text>
@@ -158,9 +162,11 @@ export default function Now() {
                 {!!pick.why && (
                   <Text style={[supporting, { color: p.accent }]}>{pick.why}</Text>
                 )}
-              </>
+              </Swap>
             ) : (
-              <Text style={[hero(size), { color: p.ink }]}>Nothing needs you right now.</Text>
+              <Enter>
+                <Text style={[hero(size), { color: p.ink }]}>Nothing needs you right now.</Text>
+              </Enter>
             )}
           </View>
         </ScrollView>
@@ -182,13 +188,20 @@ export default function Now() {
           </>
         )}
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-          <TextAction label="Capture" onPress={() => router.push('/')} />
-          <TextAction label="Places" onPress={() => router.push('/map')} />
-          <TextAction label="Rhythms" onPress={() => router.push('/rhythms')} />
-          <TextAction label="People" onPress={() => router.push('/people')} />
-          <TextAction label="Reset" onPress={() => router.push('/reset')} />
-        </View>
+        {!overstim && (
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+            <TextAction label={ui.openCapture} onPress={() => router.push('/')} />
+            <TextAction label={ui.openMap} onPress={() => router.push('/map')} />
+            <TextAction label={ui.openRhythms} onPress={() => router.push('/rhythms')} />
+            <TextAction label={ui.openPeople} onPress={() => router.push('/people')} />
+            <TextAction label={ui.openReset} onPress={() => router.push('/reset')} />
+          </View>
+        )}
+        {overstim && (
+          <Text style={[supporting, { color: p.inkMuted, marginBottom: space[4] }]}>
+            {ui.stillBeHere}
+          </Text>
+        )}
 
         <Pressable
           onPress={async () => {

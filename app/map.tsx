@@ -14,6 +14,7 @@ import {
 } from '../src/db/places';
 import { currentPosition, permissionState, requestPermission, syncRegions } from '../src/location/geofence';
 import { ui } from '../src/ui/copy.catalogue';
+import { Expand } from '../src/ui/motion';
 import { ContentColumn, Pill, Rule } from '../src/ui/primitives';
 import { usePalette, useSizeClass } from '../src/ui/theme';
 import { radius, space } from '../src/ui/tokens';

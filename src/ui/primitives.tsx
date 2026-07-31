@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Pressable, Text, View, type ViewStyle } from 'react-native';
+import { Press } from './motion';
 import { usePalette, useSizeClass } from './theme';
 import { CONTENT_MAX, MIN_TARGET, radius, space } from './tokens';
 import { emphasis } from './type';
@@ -39,24 +40,21 @@ export function Pill({
 }) {
   const p = usePalette();
   return (
-    <Pressable
+    <Press
       onPress={onPress}
-      accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityHint={accessibilityHint}
-      style={({ pressed }) => ({
+      style={{
         backgroundColor: p.ink,
         borderRadius: radius.pill,
         minHeight: 56,
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: space[5],
-        // Press feedback is opacity only — never a transform that shifts layout.
-        opacity: pressed ? 0.85 : 1,
-      })}
+      }}
     >
       <Text style={[emphasis, { color: p.onInk }]}>{label}</Text>
-    </Pressable>
+    </Press>
   );
 }
 

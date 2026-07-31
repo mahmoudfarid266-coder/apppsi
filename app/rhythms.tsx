@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { addHabit, listHabits, markHabit, type Habit } from '../src/db/systems';
 import { ui } from '../src/ui/copy.catalogue';
+import { FillTrack } from '../src/ui/motion';
 import { ContentColumn, Rule } from '../src/ui/primitives';
 import { usePalette, useSizeClass } from '../src/ui/theme';
 import { radius, space } from '../src/ui/tokens';
@@ -67,23 +68,9 @@ export default function Rhythms() {
                       {h.doneThisPeriod} of {h.targetCount}
                     </Text>
                   </View>
-                  {/* Fills. Never drains. */}
-                  <View
-                    style={{
-                      height: 4,
-                      backgroundColor: p.sunken,
-                      borderRadius: radius.pill,
-                      marginTop: space[3],
-                    }}
-                  >
-                    <View
-                      style={{
-                        height: 4,
-                        width: `${pct * 100}%`,
-                        backgroundColor: p.ink,
-                        borderRadius: radius.pill,
-                      }}
-                    />
+                  {/* Fills. Never drains. Height 10 per the component spec. */}
+                  <View style={{ marginTop: space[3] }}>
+                    <FillTrack pct={pct} track={p.sunken} fill={p.ink} />
                   </View>
                 </Pressable>
                 <Rule />
