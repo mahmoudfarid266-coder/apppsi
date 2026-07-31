@@ -52,6 +52,25 @@ export const onboarding = {
   dumpPlaceholder: 'one per line',
 } as const;
 
+export const care = {
+  subtitle: 'A log and a reminder. Never a dose, never a score.',
+  addMed: 'Add something you take',
+  medNamePlaceholder: 'what you take',
+  medTimesPlaceholder: 'times, comma separated',
+  medTitle: 'Time for this one',
+  sleepTitle: 'sleep',
+  sleepSub: 'Worked backwards from when you want to be up.',
+  windDown: 'wind-down',
+  bed: 'bed',
+  wake: 'wake',
+  wakeAt: 'up at',
+  forHours: 'hours',
+  setWindDown: 'Set the wind-down',
+  updateWindDown: 'Update the wind-down',
+  windDownTitle: 'Winding down',
+  windDownBody: 'Anything still circling goes on paper. It keeps until tomorrow.',
+} as const;
+
 export const ui = {
   capturePrompt: "What's on your mind?",
   capturePlaceholder: 'Anything at all',

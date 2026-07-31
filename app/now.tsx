@@ -193,6 +193,7 @@ export default function Now() {
             <TextAction label={ui.openCapture} onPress={() => router.push('/')} />
             <TextAction label={ui.openMap} onPress={() => router.push('/map')} />
             <TextAction label={ui.openRhythms} onPress={() => router.push('/rhythms')} />
+            <TextAction label={ui.openCare} onPress={() => router.push('/care')} />
             <TextAction label={ui.openPeople} onPress={() => router.push('/people')} />
             <TextAction label={ui.openReset} onPress={() => router.push('/reset')} />
             <TextAction label={ui.openFocus} onPress={() => router.push('/focus')} />
